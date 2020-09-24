@@ -26,6 +26,7 @@ public class WaitingTimeLine {
     @Id
     @GeneratedValue
     private Long id;
+    private Long lineNumber;
     private String service;
     private String question;
     @Enumerated(EnumType.STRING)
