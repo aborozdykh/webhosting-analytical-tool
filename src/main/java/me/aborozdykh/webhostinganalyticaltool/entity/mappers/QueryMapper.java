@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 public class QueryMapper {
     public Query getQueryFromRecordDto(RecordDto recordDto) {
         var query = new Query();
-        query.setService(recordDto.getService());
+        query.setServiceId(recordDto.getService());
         query.setQuestion(recordDto.getQuestion());
-        query.setAnswer(recordDto.getAnswer());
+        query.setResponseType(recordDto.getResponseType());
         query.setDateFrom(recordDto.getDateFrom());
         query.setDateTo(recordDto.getDateTo());
         return query;

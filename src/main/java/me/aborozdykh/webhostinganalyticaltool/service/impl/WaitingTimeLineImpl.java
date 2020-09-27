@@ -4,7 +4,6 @@ import java.util.List;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
 import me.aborozdykh.webhostinganalyticaltool.repository.WaitingTimeLineRepository;
 import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WaitingTimeLineImpl implements WaitingTimeLineService {
-    @Autowired
     private final WaitingTimeLineRepository waitingTimeLineRepository;
 
     public WaitingTimeLineImpl(WaitingTimeLineRepository waitingTimeLineRepository) {

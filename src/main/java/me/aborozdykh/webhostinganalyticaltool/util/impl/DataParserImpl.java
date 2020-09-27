@@ -2,15 +2,12 @@ package me.aborozdykh.webhostinganalyticaltool.util.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import me.aborozdykh.webhostinganalyticaltool.entity.Query;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
-import me.aborozdykh.webhostinganalyticaltool.entity.dto.RecordDto;
 import me.aborozdykh.webhostinganalyticaltool.entity.mappers.QueryMapper;
 import me.aborozdykh.webhostinganalyticaltool.entity.mappers.RecordDtoMapper;
 import me.aborozdykh.webhostinganalyticaltool.entity.mappers.WaitingTimeLineMapper;
 import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,12 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DataParserImpl implements DataParser {
-
-    @Autowired
     private final QueryMapper queryMapper;
-    @Autowired
     private final RecordDtoMapper recordDtoMapper;
-    @Autowired
     private final WaitingTimeLineMapper waitingTimeLineMapper;
 
     public DataParserImpl(QueryMapper queryMapper,
@@ -35,19 +28,7 @@ public class DataParserImpl implements DataParser {
     }
 
     @Override
-    public List<RecordDto> getRecordDtoList(List<String> records) {
-        return records.stream()
-                .map(recordDtoMapper::getRecordDtoFromRecord)
-                .collect(Collectors.toList());
-    }
-
-    public List<Query> getQueryList(List<RecordDto> recordDtoList) {
-        return recordDtoList.stream()
-                .map(queryMapper::getQueryFromRecordDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<Query> getQueryListFromRecords(List<String> records) {
+    public List<Query> getQueryList(List<String> records) {
         List<Query> queryList = new ArrayList<>();
         var query = new Query();
         for (int i = 0; i < records.size(); i++) {
@@ -61,7 +42,7 @@ public class DataParserImpl implements DataParser {
     }
 
     @Override
-    public List<WaitingTimeLine> getWaitingTimeListFromRecords(List<String> records) {
+    public List<WaitingTimeLine> getWaitingTimeList(List<String> records) {
         List<WaitingTimeLine> waitingTimeLineList = new ArrayList<>();
         var waitingTimeLine = new WaitingTimeLine();
         for (int i = 0; i < records.size(); i++) {

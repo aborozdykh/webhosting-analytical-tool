@@ -4,7 +4,6 @@ import java.util.List;
 import me.aborozdykh.webhostinganalyticaltool.entity.Query;
 import me.aborozdykh.webhostinganalyticaltool.repository.QueryRepository;
 import me.aborozdykh.webhostinganalyticaltool.service.QueryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class QueryServiceImpl implements QueryService {
-    @Autowired
     private final QueryRepository queryRepository;
 
     public QueryServiceImpl(QueryRepository queryRepository) {

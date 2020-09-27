@@ -42,8 +42,8 @@ public class DataReaderController {
             try {
                 var records = fileReaderUtil
                         .getDataFromFile(file.getInputStream());
-                var queryList = dataParser.getQueryListFromRecords(records);
-                var waitingTimeLineList = dataParser.getWaitingTimeListFromRecords(records);
+                var queryList = dataParser.getQueryList(records);
+                var waitingTimeLineList = dataParser.getWaitingTimeList(records);
                 queryService.saveAll(queryList);
                 waitingTimeLineService.saveAll(waitingTimeLineList);
                 message = "Uploaded the file successfully: "

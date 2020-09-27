@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,17 +21,17 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 @Table(name = "queries")
 public class Query {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long recordNumber;
-    private String service;
+    private String serviceId;
     private String question;
     @Enumerated(EnumType.STRING)
-    private WaitingTimeLine.Answer answer;
+    private ResponseType responseType;
     private LocalDate dateFrom;
     private LocalDate dateTo;
+    private Long recordNumber;
 }
