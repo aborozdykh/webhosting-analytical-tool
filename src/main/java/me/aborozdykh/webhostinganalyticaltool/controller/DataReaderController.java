@@ -1,16 +1,17 @@
 package me.aborozdykh.webhostinganalyticaltool.controller;
 
+import me.aborozdykh.webhostinganalyticaltool.service.QueryService;
+import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
+import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
+import me.aborozdykh.webhostinganalyticaltool.util.FileReaderUtil;
 import me.aborozdykh.webhostinganalyticaltool.util.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * @author Andrii Borozdykh
@@ -18,17 +19,33 @@ import java.util.List;
 @Controller
 @RequestMapping("/data")
 public class DataReaderController {
+    private final FileReaderUtil fileReaderUtil;
+    private final DataParser dataParser;
+    private final QueryService queryService;
+    private final WaitingTimeLineService waitingTimeLineService;
+
+    public DataReaderController(FileReaderUtil fileReaderUtil,
+                                DataParser dataParser,
+                                QueryService queryService,
+                                WaitingTimeLineService waitingTimeLineService) {
+        this.fileReaderUtil = fileReaderUtil;
+        this.dataParser = dataParser;
+        this.queryService = queryService;
+        this.waitingTimeLineService = waitingTimeLineService;
+    }
 
     @PostMapping("/upload-file")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-        String message = "";
+        String message;
 
-        if (dataReaderService.hasCorrectFormat(file)) {
+        if (fileReaderUtil.hasCorrectFormat(file)) {
             try {
-                var reviewRequestDtoList = dataReaderService
+                var records = fileReaderUtil
                         .getDataFromFile(file.getInputStream());
-                dataToDbSaver.saveToDb(reviewRequestDtoList);
-
+                var queryList = dataParser.getQueryListFromRecords(records);
+                var waitingTimeLineList = dataParser.getWaitingTimeListFromRecords(records);
+                queryService.saveAll(queryList);
+                waitingTimeLineService.saveAll(waitingTimeLineList);
                 message = "Uploaded the file successfully: "
                         + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
@@ -42,11 +59,5 @@ public class DataReaderController {
 
         message = "Please upload a csv file!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(message));
-    }
-
-    @PostMapping("/read-file")
-    public ResponseEntity<ResponseMessage> readFromFile(@RequestParam("path") String path) {
-        getClass().getResourceAsStream(path);
-        return null;
     }
 }

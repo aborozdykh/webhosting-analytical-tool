@@ -1,11 +1,12 @@
 package me.aborozdykh.webhostinganalyticaltool.entity.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.aborozdykh.webhostinganalyticaltool.entity.Query;
+import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
 
 /**
  * @author Andrii Borozdykh
@@ -14,15 +15,14 @@ import me.aborozdykh.webhostinganalyticaltool.entity.Query;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObjectToDto {
-    private Long id;
+@EqualsAndHashCode
+public class RecordDto {
+    private String recordType;
     private String service;
     private String question;
-    private Query.Answer answer;
-    private LocalDateTime date;
+    private WaitingTimeLine.Answer answer;
+    private LocalDate date;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
     private int time;
-
-    public enum Answer {
-        P, N;
-    }
 }

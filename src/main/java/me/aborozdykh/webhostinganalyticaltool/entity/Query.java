@@ -1,10 +1,11 @@
 package me.aborozdykh.webhostinganalyticaltool.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,17 +25,13 @@ import lombok.Setter;
 @Table(name = "queries")
 public class Query {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long lineNumber;
+    private Long recordNumber;
     private String service;
     private String question;
     @Enumerated(EnumType.STRING)
-    private Answer answer;
-    private LocalDateTime date;
-    private int time;
-
-    public enum Answer {
-        P, N;
-    }
+    private WaitingTimeLine.Answer answer;
+    private LocalDate dateFrom;
+    private LocalDate dateTo;
 }
