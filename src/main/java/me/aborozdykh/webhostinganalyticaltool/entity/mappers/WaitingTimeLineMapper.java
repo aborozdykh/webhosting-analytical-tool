@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class WaitingTimeLineMapper {
     public WaitingTimeLine getWaitingTimeLineFromRecordDto(RecordDto recordDto) {
         var waitingTimeLine = new WaitingTimeLine();
-        waitingTimeLine.setServiceId(recordDto.getService());
+        waitingTimeLine.setServiceId(recordDto.getServiceId());
         waitingTimeLine.setQuestion(recordDto.getQuestion());
         waitingTimeLine.setResponseType(recordDto.getResponseType());
         waitingTimeLine.setDate(recordDto.getDate());

@@ -1,10 +1,10 @@
-package me.aborozdykh.webhostinganalyticaltool.service.impl;
+package me.aborozdykh.webhostinganalyticaltool.util.impl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import me.aborozdykh.webhostinganalyticaltool.entity.Query;
+import me.aborozdykh.webhostinganalyticaltool.entity.EvaluateQuery;
 import me.aborozdykh.webhostinganalyticaltool.entity.ResponseType;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
 import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
@@ -26,16 +26,16 @@ class DataParserImplTest {
 
     @Test
     void getQueryList() {
-        var query = new Query();
-        query.setRecordNumber(1L);
-        query.setServiceId("1.1");
-        query.setQuestion("8");
-        query.setResponseType(ResponseType.P);
-        query.setDateFrom(LocalDate.parse("01.01.2012", FORMATTER));
-        query.setDateTo(LocalDate.parse("01.12.2012", FORMATTER));
-        List<Query> expected = new ArrayList<>();
-        expected.add(query);
-        var actual = dataParser.getQueryList(getRecords());
+        var evaluateQuery = new EvaluateQuery();
+        evaluateQuery.setRecordNumber(1L);
+        evaluateQuery.setServiceId("1.1");
+        evaluateQuery.setQuestion("8");
+        evaluateQuery.setResponseType(ResponseType.P);
+        evaluateQuery.setDateFrom(LocalDate.parse("01.01.2012", FORMATTER));
+        evaluateQuery.setDateTo(LocalDate.parse("01.12.2012", FORMATTER));
+        List<EvaluateQuery> expected = new ArrayList<>();
+        expected.add(evaluateQuery);
+        var actual = dataParser.getEvaluateQueryList(getRecords());
         Assert.assertEquals(expected, actual);
     }
 

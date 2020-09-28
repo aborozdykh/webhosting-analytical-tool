@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import me.aborozdykh.webhostinganalyticaltool.entity.AverageTime;
-import me.aborozdykh.webhostinganalyticaltool.entity.Query;
+import me.aborozdykh.webhostinganalyticaltool.entity.EvaluateQuery;
 import me.aborozdykh.webhostinganalyticaltool.entity.ResponseType;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
 import me.aborozdykh.webhostinganalyticaltool.service.AverageTimeService;
@@ -20,21 +20,23 @@ public class AverageTimeServiceImpl implements AverageTimeService {
     private static final String DASH = "-";
 
     @Override
-    public List<AverageTime> getAverageTimeList(List<Query> queryList,
+    public List<AverageTime> getAverageTimeList(List<EvaluateQuery> evaluateQueryList,
                                                 List<WaitingTimeLine> waitingTimeLineList) {
         List<AverageTime> averageTimeList = new ArrayList<>();
-        for (Query query : queryList) {
+        for (EvaluateQuery evaluateQuery : evaluateQueryList) {
             var averageTime = new AverageTime();
             int time = 0;
             int count = 0;
             for (WaitingTimeLine waitingTimeLine : waitingTimeLineList) {
-                if (waitingTimeLine.getRecordNumber() < query.getRecordNumber()
-                        && serviceIsSame(waitingTimeLine.getServiceId(), query.getServiceId())
-                        && questionIsSame(waitingTimeLine.getQuestion(), query.getQuestion())
+                if (waitingTimeLine.getRecordNumber() < evaluateQuery.getRecordNumber()
+                        && serviceIsSame(waitingTimeLine.getServiceId(),
+                        evaluateQuery.getServiceId())
+                        && questionIsSame(waitingTimeLine.getQuestion(),
+                        evaluateQuery.getQuestion())
                         && responseTypeIsSame(waitingTimeLine.getResponseType(),
-                        query.getResponseType())
-                        && dateIsBetween(waitingTimeLine.getDate(), query.getDateFrom(),
-                        query.getDateTo())) {
+                        evaluateQuery.getResponseType())
+                        && dateIsBetween(waitingTimeLine.getDate(), evaluateQuery.getDateFrom(),
+                        evaluateQuery.getDateTo())) {
                     time += waitingTimeLine.getTime();
                     count++;
                 }
@@ -49,23 +51,25 @@ public class AverageTimeServiceImpl implements AverageTimeService {
         return averageTimeList;
     }
 
-    private boolean serviceIsSame(String waitingTimeLineServiceId, String queryServiceId) {
-        return queryServiceId.equals(STAR) || waitingTimeLineServiceId.startsWith(queryServiceId);
+    private boolean serviceIsSame(String waitingTimeLineServiceId, String evaluateQueryServiceId) {
+        return evaluateQueryServiceId.equals(STAR)
+                || waitingTimeLineServiceId.startsWith(evaluateQueryServiceId);
     }
 
-    private boolean questionIsSame(String waitingTimeLineQuestion, String queryQuestion) {
-        return queryQuestion.equals(STAR) || waitingTimeLineQuestion.startsWith(queryQuestion);
+    private boolean questionIsSame(String waitingTimeLineQuestion, String evaluateQueryQuestion) {
+        return evaluateQueryQuestion.equals(STAR)
+                || waitingTimeLineQuestion.startsWith(evaluateQueryQuestion);
     }
 
     private boolean responseTypeIsSame(ResponseType waitingTimeLineResponseType,
-                                       ResponseType queryResponseType) {
-        return queryResponseType.equals(waitingTimeLineResponseType);
+                                       ResponseType evaluateQueryResponseType) {
+        return evaluateQueryResponseType.equals(waitingTimeLineResponseType);
     }
 
     private boolean dateIsBetween(LocalDate waitingTimeLineDate,
-                                  LocalDate queryDateFrom,
-                                  LocalDate queryDateTo) {
-        return waitingTimeLineDate.isAfter(queryDateFrom.minusDays(1))
-                && waitingTimeLineDate.isBefore(queryDateTo.plusDays(1));
+                                  LocalDate evaluateQueryDateFrom,
+                                  LocalDate evaluateQueryDateTo) {
+        return waitingTimeLineDate.isAfter(evaluateQueryDateFrom.minusDays(1))
+                && waitingTimeLineDate.isBefore(evaluateQueryDateTo.plusDays(1));
     }
 }

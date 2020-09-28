@@ -4,6 +4,8 @@ import java.util.List;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
 import me.aborozdykh.webhostinganalyticaltool.repository.WaitingTimeLineRepository;
 import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -26,5 +28,13 @@ public class WaitingTimeLineImpl implements WaitingTimeLineService {
     @Override
     public List<WaitingTimeLine> findAll() {
         return waitingTimeLineRepository.findAll();
+    }
+
+    @Override
+    public Long getLastRecordNumber() {
+        Pageable pageable = PageRequest.of(0, 1);
+        List<WaitingTimeLine> content
+                = waitingTimeLineRepository.findLastRecord(pageable).getContent();
+        return content.isEmpty() ? 0L : content.get(0).getRecordNumber();
     }
 }

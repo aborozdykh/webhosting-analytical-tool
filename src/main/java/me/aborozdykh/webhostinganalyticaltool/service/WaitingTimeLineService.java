@@ -10,4 +10,6 @@ public interface WaitingTimeLineService {
     List<WaitingTimeLine> saveAll(List<WaitingTimeLine> waitingTimeLineList);
 
     List<WaitingTimeLine> findAll();
+
+    Long getLastRecordNumber();
 }

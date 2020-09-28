@@ -2,11 +2,13 @@ package me.aborozdykh.webhostinganalyticaltool.util.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import me.aborozdykh.webhostinganalyticaltool.entity.Query;
+import me.aborozdykh.webhostinganalyticaltool.entity.EvaluateQuery;
 import me.aborozdykh.webhostinganalyticaltool.entity.WaitingTimeLine;
-import me.aborozdykh.webhostinganalyticaltool.entity.mappers.QueryMapper;
+import me.aborozdykh.webhostinganalyticaltool.entity.mappers.EvaluateQueryMapper;
 import me.aborozdykh.webhostinganalyticaltool.entity.mappers.RecordDtoMapper;
 import me.aborozdykh.webhostinganalyticaltool.entity.mappers.WaitingTimeLineMapper;
+import me.aborozdykh.webhostinganalyticaltool.service.EvaluateQueryService;
+import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
 import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
 import org.springframework.stereotype.Service;
 
@@ -15,44 +17,60 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DataParserImpl implements DataParser {
-    private final QueryMapper queryMapper;
+    private final EvaluateQueryMapper evaluateQueryMapper;
     private final RecordDtoMapper recordDtoMapper;
     private final WaitingTimeLineMapper waitingTimeLineMapper;
+    private final EvaluateQueryService evaluateQueryService;
+    private final WaitingTimeLineService waitingTimeLineService;
 
-    public DataParserImpl(QueryMapper queryMapper,
+    public DataParserImpl(EvaluateQueryMapper evaluateQueryMapper,
                           RecordDtoMapper recordDtoMapper,
-                          WaitingTimeLineMapper waitingTimeLineMapper) {
-        this.queryMapper = queryMapper;
+                          WaitingTimeLineMapper waitingTimeLineMapper,
+                          EvaluateQueryService evaluateQueryService,
+                          WaitingTimeLineService waitingTimeLineService) {
+        this.evaluateQueryMapper = evaluateQueryMapper;
         this.recordDtoMapper = recordDtoMapper;
         this.waitingTimeLineMapper = waitingTimeLineMapper;
+        this.evaluateQueryService = evaluateQueryService;
+        this.waitingTimeLineService = waitingTimeLineService;
     }
 
     @Override
-    public List<Query> getQueryList(List<String> records) {
-        List<Query> queryList = new ArrayList<>();
-        var query = new Query();
-        for (int i = 0; i < records.size(); i++) {
-            var recordDto = recordDtoMapper.getRecordDtoFromRecord(records.get(i));
-            if (recordDto.getRecordType().equals(RecordDtoMapper.QUERY_TYPE)) {
-                query = queryMapper.getQueryFromRecordDto(recordDto, (long) i);
-                queryList.add(query);
+    public List<EvaluateQuery> getEvaluateQueryList(List<String> records) {
+        List<EvaluateQuery> evaluateQueryList = new ArrayList<>();
+        var evaluateQuery = new EvaluateQuery();
+        var lastRecordNumber = getLastRecordNumber();
+        for (long i = 0; i < records.size(); i++) {
+            var recordDto = recordDtoMapper.getRecordDtoFromRecord(records.get((int) i));
+            if (recordDto.getRecordType().equals(RecordDtoMapper.EVALUATE_QUERY_TYPE)) {
+                evaluateQuery = evaluateQueryMapper.getQueryFromRecordDto(recordDto,
+                        i + lastRecordNumber);
+                evaluateQueryList.add(evaluateQuery);
             }
         }
-        return queryList;
+        return evaluateQueryList;
     }
 
     @Override
     public List<WaitingTimeLine> getWaitingTimeList(List<String> records) {
         List<WaitingTimeLine> waitingTimeLineList = new ArrayList<>();
         var waitingTimeLine = new WaitingTimeLine();
-        for (int i = 0; i < records.size(); i++) {
-            var recordDto = recordDtoMapper.getRecordDtoFromRecord(records.get(i));
+        var lastRecordNumber = getLastRecordNumber();
+        for (long i = 0; i < records.size(); i++) {
+            var recordDto = recordDtoMapper.getRecordDtoFromRecord(records.get((int) i));
             if (recordDto.getRecordType().equals(RecordDtoMapper.WAITING_TIME_LINE_TYPE)) {
                 waitingTimeLine = waitingTimeLineMapper
-                        .getWaitingTimeLineFromRecordDto(recordDto, (long) i);
+                        .getWaitingTimeLineFromRecordDto(recordDto, i + lastRecordNumber);
                 waitingTimeLineList.add(waitingTimeLine);
             }
         }
         return waitingTimeLineList;
+    }
+
+    private long getLastRecordNumber() {
+        var evaluateRecordNumber = evaluateQueryService.getLastRecordNumber();
+        var waitingTimeLineRecordNumber = waitingTimeLineService.getLastRecordNumber();
+        return evaluateRecordNumber >= waitingTimeLineRecordNumber ? evaluateRecordNumber
+                : waitingTimeLineRecordNumber;
     }
 }

@@ -30,9 +30,9 @@ class AverageTimeServiceImplTest {
         expected.add(new AverageTime("-"));
         var inputStream = getClass().getClassLoader().getResourceAsStream("testData.csv");
         var records = fileReaderUtil.getDataFromFile(inputStream);
-        var queryList = dataParser.getQueryList(records);
+        var evaluateQueryList = dataParser.getEvaluateQueryList(records);
         var waitingTimeList = dataParser.getWaitingTimeList(records);
-        var actual = averageTimeService.getAverageTimeList(queryList, waitingTimeList);
+        var actual = averageTimeService.getAverageTimeList(evaluateQueryList, waitingTimeList);
         Assert.assertEquals(expected, actual);
     }
 }

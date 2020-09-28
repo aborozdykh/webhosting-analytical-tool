@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import me.aborozdykh.webhostinganalyticaltool.service.QueryService;
+import me.aborozdykh.webhostinganalyticaltool.service.EvaluateQueryService;
 import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
 import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
 import me.aborozdykh.webhostinganalyticaltool.util.FileReaderUtil;
@@ -31,7 +31,7 @@ class AverageTimeControllerTest {
     @Autowired
     private DataParser dataParser;
     @Autowired
-    private QueryService queryService;
+    private EvaluateQueryService evaluateQueryService;
     @Autowired
     private WaitingTimeLineService waitingTimeLineService;
 
@@ -39,9 +39,9 @@ class AverageTimeControllerTest {
     void getAverageTime() throws Exception {
         var inputStream = getClass().getClassLoader().getResourceAsStream("testData.csv");
         var records = fileReaderUtil.getDataFromFile(inputStream);
-        var queryList = dataParser.getQueryList(records);
+        var evaluateQueryList = dataParser.getEvaluateQueryList(records);
         var waitingTimeLineList = dataParser.getWaitingTimeList(records);
-        queryService.saveAll(queryList);
+        evaluateQueryService.saveAll(evaluateQueryList);
         waitingTimeLineService.saveAll(waitingTimeLineList);
 
         MockHttpServletRequestBuilder builder

@@ -1,6 +1,6 @@
 package me.aborozdykh.webhostinganalyticaltool.controller;
 
-import me.aborozdykh.webhostinganalyticaltool.service.QueryService;
+import me.aborozdykh.webhostinganalyticaltool.service.EvaluateQueryService;
 import me.aborozdykh.webhostinganalyticaltool.service.WaitingTimeLineService;
 import me.aborozdykh.webhostinganalyticaltool.util.DataParser;
 import me.aborozdykh.webhostinganalyticaltool.util.FileReaderUtil;
@@ -21,16 +21,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class DataReaderController {
     private final FileReaderUtil fileReaderUtil;
     private final DataParser dataParser;
-    private final QueryService queryService;
+    private final EvaluateQueryService evaluateQueryService;
     private final WaitingTimeLineService waitingTimeLineService;
 
     public DataReaderController(FileReaderUtil fileReaderUtil,
                                 DataParser dataParser,
-                                QueryService queryService,
+                                EvaluateQueryService evaluateQueryService,
                                 WaitingTimeLineService waitingTimeLineService) {
         this.fileReaderUtil = fileReaderUtil;
         this.dataParser = dataParser;
-        this.queryService = queryService;
+        this.evaluateQueryService = evaluateQueryService;
         this.waitingTimeLineService = waitingTimeLineService;
     }
 
@@ -42,9 +42,9 @@ public class DataReaderController {
             try {
                 var records = fileReaderUtil
                         .getDataFromFile(file.getInputStream());
-                var queryList = dataParser.getQueryList(records);
+                var evaluateQueryList = dataParser.getEvaluateQueryList(records);
                 var waitingTimeLineList = dataParser.getWaitingTimeList(records);
-                queryService.saveAll(queryList);
+                evaluateQueryService.saveAll(evaluateQueryList);
                 waitingTimeLineService.saveAll(waitingTimeLineList);
                 message = "Uploaded the file successfully: "
                         + file.getOriginalFilename();

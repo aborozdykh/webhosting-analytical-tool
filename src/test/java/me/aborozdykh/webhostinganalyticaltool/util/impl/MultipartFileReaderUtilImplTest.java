@@ -1,4 +1,4 @@
-package me.aborozdykh.webhostinganalyticaltool.service.impl;
+package me.aborozdykh.webhostinganalyticaltool.util.impl;
 
 import java.util.List;
 import me.aborozdykh.webhostinganalyticaltool.util.FileReaderUtil;

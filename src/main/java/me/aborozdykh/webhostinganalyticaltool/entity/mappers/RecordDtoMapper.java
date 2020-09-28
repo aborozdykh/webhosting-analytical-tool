@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RecordDtoMapper {
-    public static final String QUERY_TYPE = "D";
+    public static final String EVALUATE_QUERY_TYPE = "D";
     public static final String WAITING_TIME_LINE_TYPE = "C";
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private static final String DAY_MONTH_YEAR_SEPARATOR = "[/.]";
@@ -23,13 +23,13 @@ public class RecordDtoMapper {
         String[] data = record.split(FIELD_SEPARATOR);
         var recordDto = new RecordDto();
         recordDto.setRecordType(data[0]);
-        recordDto.setService(data[1]);
+        recordDto.setServiceId(data[1]);
         recordDto.setQuestion(data[2]);
         recordDto.setResponseType(ResponseType.valueOf(data[3]));
         if (recordDto.getRecordType().equals(WAITING_TIME_LINE_TYPE)) {
             recordDto.setDate(getDateForOnceDateFormat(data[4]));
             recordDto.setTime(Integer.parseInt(data[5]));
-        } else if (recordDto.getRecordType().equals(QUERY_TYPE)) {
+        } else if (recordDto.getRecordType().equals(EVALUATE_QUERY_TYPE)) {
             if (data[4].contains(DATE_SEPARATOR)) {
                 recordDto.setDateFrom(getFromDateDoubleDateFormat(data[4]));
                 recordDto.setDateTo(getToDateDoubleDateFormat(data[4]));
@@ -39,7 +39,7 @@ public class RecordDtoMapper {
             }
         } else {
             throw new WrongDataException("Only " + WAITING_TIME_LINE_TYPE + " and "
-                    + QUERY_TYPE + " types of line are possible!");
+                    + EVALUATE_QUERY_TYPE + " types of line are possible!");
         }
         return recordDto;
     }

@@ -16,7 +16,7 @@ import me.aborozdykh.webhostinganalyticaltool.entity.ResponseType;
 @EqualsAndHashCode
 public class RecordDto {
     private String recordType;
-    private String service;
+    private String serviceId;
     private String question;
     private ResponseType responseType;
     private LocalDate date;
