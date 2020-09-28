@@ -18,11 +18,6 @@ public class QueryServiceImpl implements QueryService {
     }
 
     @Override
-    public Query save(Query query) {
-        return queryRepository.save(query);
-    }
-
-    @Override
     public List<Query> saveAll(List<Query> queryList) {
         return queryRepository.saveAll(queryList);
     }

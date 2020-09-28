@@ -19,11 +19,6 @@ public class WaitingTimeLineImpl implements WaitingTimeLineService {
     }
 
     @Override
-    public WaitingTimeLine save(WaitingTimeLine waitingTimeLine) {
-        return waitingTimeLineRepository.save(waitingTimeLine);
-    }
-
-    @Override
     public List<WaitingTimeLine> saveAll(List<WaitingTimeLine> waitingTimeLineList) {
         return waitingTimeLineRepository.saveAll(waitingTimeLineList);
     }
